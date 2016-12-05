@@ -1,0 +1,7 @@
+.NET
+Javascript
+Design, Architecture
+Package Managers
+Data Structure and Alogrithms
+Databases
+
