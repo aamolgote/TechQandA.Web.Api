@@ -10,10 +10,8 @@ namespace TechQandA.DataAccess
     /// </summary>
     public interface IDatabaseRepository
     {
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        void Initialize();
-
+        string EndPoint { get; }
+        string AuthKey { get; }
+        string DatabaseId { get; }
     }
 }

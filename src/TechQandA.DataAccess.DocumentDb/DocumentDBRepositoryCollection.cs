@@ -17,8 +17,9 @@ namespace TechQandA.DataAccess.DocumentDb
     public class DocumentDBRepositoryCollection<T> : IRepositoryCollection<T>
     {
         #region private members
-        private DocumentDBRepository<T> db;
+        private IDatabaseRepository db;
         private string collectionName;
+        private DocumentClient client;
         #endregion
 
         #region Constructor
@@ -30,6 +31,7 @@ namespace TechQandA.DataAccess.DocumentDb
         {
             this.db = new DocumentDBRepository<T>();
             this.collectionName = collectionName;
+            this.client = new DocumentClient(new Uri(this.db.EndPoint), this.db.AuthKey);
         }
         #endregion
 
@@ -42,13 +44,13 @@ namespace TechQandA.DataAccess.DocumentDb
         {
             try
             {
-                await this.db.Client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(db.DatabaseId, this.collectionName));
+                await this.client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(db.DatabaseId, this.collectionName));
             }
             catch (DocumentClientException ex)
             {
                 if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    await this.db.Client.CreateDocumentCollectionAsync(
+                    await this.client.CreateDocumentCollectionAsync(
                         UriFactory.CreateDatabaseUri(db.DatabaseId),
                         new DocumentCollection { Id = this.collectionName },
                         new RequestOptions { OfferThroughput = 1000 });
@@ -63,8 +65,8 @@ namespace TechQandA.DataAccess.DocumentDb
         /// <returns></returns>
         public async Task<T> CreateAsync(T item)
         {
-            var document = await this.db.Client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(this.db.DatabaseId, this.collectionName), item);
-            return (T)(dynamic)document;
+            var document = await this.client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(this.db.DatabaseId, this.collectionName), item);
+            return (T)(dynamic)document.Resource; 
         }
 
         /// <summary>
@@ -75,7 +77,7 @@ namespace TechQandA.DataAccess.DocumentDb
         /// <returns></returns>
         public async Task<T> UpdateAsync(string id, T item)
         {
-            var document = await this.db.Client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id), item);
+            var document = await this.client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id), item);
             return (T)(dynamic)document;
         }
 
@@ -86,7 +88,7 @@ namespace TechQandA.DataAccess.DocumentDb
         /// <returns></returns>
         public async Task<T> DeleteAsync(string id)
         {
-            var document = await this.db.Client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id));
+            var document = await this.client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id));
             return (T)(dynamic)document;
         }
 
@@ -97,7 +99,7 @@ namespace TechQandA.DataAccess.DocumentDb
         /// <returns></returns>
         public async Task<T> GetAsync(string id)
         {
-            var document = await this.db.Client.ReadDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id));
+            var document = await this.client.ReadDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id));
             return (T)(dynamic)document;
         }
 
@@ -109,7 +111,7 @@ namespace TechQandA.DataAccess.DocumentDb
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
         {
 
-            IDocumentQuery<T> query = this.db.Client.CreateDocumentQuery<T>(
+            IDocumentQuery<T> query = this.client.CreateDocumentQuery<T>(
                 UriFactory.CreateDocumentCollectionUri(this.db.DatabaseId, this.collectionName),
                 new FeedOptions { MaxItemCount = -1 })
                 .Where(predicate)

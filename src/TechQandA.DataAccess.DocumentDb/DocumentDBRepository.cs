@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Documents.Client;
+﻿using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,12 @@ namespace TechQandA.DataAccess.DocumentDb
             endPoint = "https://techqanda.documents.azure.com:443/";
             authKey = "MctcfxAqTutrlSlnmh4vrgPqNSUq5Y7Es7B2XVmNq7Xvl1aRh4pbOtwEScantnw0jH21uJTclosuFZ8qfELTFg==";
             this.client = new DocumentClient(new Uri(endPoint), authKey);
+            this.Initialize();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
-           
+            this.CreateDatabaseIfNotExistsAsync().Wait();
         }
 
         public string DatabaseId
@@ -40,6 +42,39 @@ namespace TechQandA.DataAccess.DocumentDb
             }
         }
 
+        public string EndPoint
+        {
+            get
+            {
+                return this.endPoint;
+            }
+        }
 
+        public string AuthKey
+        {
+            get
+            {
+               return this.authKey;
+            }
+        }
+
+        private async Task CreateDatabaseIfNotExistsAsync()
+        {
+            try
+            {
+                await this.client.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(DatabaseId));
+            }
+            catch (DocumentClientException e)
+            {
+                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    await this.client.CreateDatabaseAsync(new Database { Id = DatabaseId });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
     }
 }

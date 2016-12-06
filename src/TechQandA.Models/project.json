@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "CoreCompat.Newtonsoft.Json": "9.0.2-beta001",
+    "Microsoft.Azure.DocumentDB.Core": "0.1.0-preview",
     "NETStandard.Library": "1.6.0"
   },
 
