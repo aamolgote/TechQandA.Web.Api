@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace TechQandA.Models.Dto
 {
-    public class Category
+    public class SubCategory
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
@@ -16,5 +16,8 @@ namespace TechQandA.Models.Dto
 
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
+
+        [JsonProperty(PropertyName = "categoryId")]
+        public string CategoryId { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace TechQandA.Web.Api.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{categoryId}")]
         public Category Get(string categoryId)
         {
             return this.categoryManager.GetCategory(categoryId).Result;
@@ -49,7 +49,7 @@ namespace TechQandA.Web.Api.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{categoryId}")]
         public Category Delete(string categoryId)
         {
             return this.categoryManager.DeleteCategory(categoryId).Result;

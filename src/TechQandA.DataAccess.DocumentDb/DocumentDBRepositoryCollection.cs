@@ -78,7 +78,7 @@ namespace TechQandA.DataAccess.DocumentDb
         public async Task<T> UpdateAsync(string id, T item)
         {
             var document = await this.client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id), item);
-            return (T)(dynamic)document;
+            return (T)(dynamic)document.Resource;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace TechQandA.DataAccess.DocumentDb
         public async Task<T> DeleteAsync(string id)
         {
             var document = await this.client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id));
-            return (T)(dynamic)document;
+            return (T)(dynamic)document.Resource;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace TechQandA.DataAccess.DocumentDb
         public async Task<T> GetAsync(string id)
         {
             var document = await this.client.ReadDocumentAsync(UriFactory.CreateDocumentUri(this.db.DatabaseId, this.collectionName, id));
-            return (T)(dynamic)document;
+            return (T)(dynamic)document.Resource;
         }
 
         /// <summary>

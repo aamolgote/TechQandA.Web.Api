@@ -15,6 +15,9 @@ namespace TechQandA.DataAccess.DocumentDb
         {
             builder.RegisterType<DocumentDBRepositoryCollection<Category>>().As<IRepositoryCollection<Category>>()
                 .WithParameter("collectionName", "Category");
+
+            builder.RegisterType<DocumentDBRepositoryCollection<SubCategory>>().As<IRepositoryCollection<SubCategory>>()
+               .WithParameter("collectionName", "SubCategory");
         }
     }
 }

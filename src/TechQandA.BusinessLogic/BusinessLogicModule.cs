@@ -19,6 +19,7 @@ namespace TechQandA.BusinessLogic
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CategoryManager>().As<ICategoryManager>();
+            builder.RegisterType<SubCategoryManager>().As<ISubCategoryManager>();
             //base.Load(builder);
         }
     }
