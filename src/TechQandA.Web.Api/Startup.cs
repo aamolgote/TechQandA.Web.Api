@@ -12,6 +12,8 @@ using Autofac.Extensions.DependencyInjection;
 using TechQandA.DI;
 using TechQandA.BusinessLogic;
 using TechQandA.DataAccess.DocumentDb;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace TechQandA.Web.Api
 {
@@ -34,6 +36,12 @@ namespace TechQandA.Web.Api
         {
             // Add framework services.
             services.AddMvc();
+
+            //Enable Cors
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowSpecificOrigin"));
+            });
 
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen();
