@@ -16,6 +16,7 @@ namespace TechQandA.Web.Api.Controllers
         #region Private Static members
         private static Logger Logger = LogManager.GetCurrentClassLogger();
         #endregion
+
         #region Private Members
         private readonly ICategoryManager categoryManager;
         #endregion
@@ -48,11 +49,11 @@ namespace TechQandA.Web.Api.Controllers
             try
             {
                 var category = this.categoryManager.GetCategory(categoryId).Result;
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(category);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                return new ObjectResult(category);
             }
             catch (Exception ex)
             {
