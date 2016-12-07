@@ -14,6 +14,7 @@ using TechQandA.BusinessLogic;
 using TechQandA.DataAccess.DocumentDb;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using NLog.Extensions.Logging;
 
 namespace TechQandA.Web.Api
 {
@@ -49,6 +50,8 @@ namespace TechQandA.Web.Api
 
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen();
+
+            
 
             // Add Autofac
             var containerBuilder = new ContainerBuilder();
@@ -86,6 +89,13 @@ namespace TechQandA.Web.Api
             {
                 app.UseExceptionHandler("/error");
             }
+
+            //add NLog to ASP.NET Core
+            loggerFactory.AddNLog();
+
+
+            //needed for non-NETSTANDARD platforms: configure nlog.config in your project root
+            env.ConfigureNLog("nlog.config");
         }
     }
 }
