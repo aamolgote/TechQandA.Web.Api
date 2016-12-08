@@ -28,6 +28,9 @@ plugins/android.json
 plugins/ios.json
 www/
 $RECYCLE.BIN/
+logs/
+# Visual Studio 2015 cache/options directory
+.vs/
 
 .DS_Store
 Thumbs.db
